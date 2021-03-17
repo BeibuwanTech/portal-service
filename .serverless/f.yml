@@ -1,0 +1,45 @@
+service:
+  name: beibuwan-portal-service
+provider:
+  name: aliyun
+  runtime: nodejs12
+aggregation:
+  all: &ref_3
+    functionsPattern: '*'
+    handler: all.handler
+    _isAggregation: true
+    events:
+      - http:
+          method: any
+          path: /*
+    _handlers:
+      - handler: apiService.get
+        events:
+          http:
+            method: &ref_0
+              - get
+            path: /standard
+        path: /standard
+      - handler: apiService.service
+        events:
+          http:
+            method: &ref_1
+              - get
+            path: '/service/:type'
+        path: '/service/:type'
+      - handler: apiService.ad
+        events:
+          http:
+            method: &ref_2
+              - get
+            path: '/ad/:type'
+        path: '/ad/:type'
+    _allAggred:
+      - path: /standard
+        method: *ref_0
+      - path: '/service/:type'
+        method: *ref_1
+      - path: '/ad/:type'
+        method: *ref_2
+functions:
+  all: *ref_3
